@@ -1,28 +1,21 @@
 package hyerim.my.videoproject.adapter;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
+import com.bumptech.glide.Glide;
+
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import hyerim.my.videoproject.MainActivity;
 import hyerim.my.videoproject.R;
 import hyerim.my.videoproject.object.ItemObject;
 
@@ -30,6 +23,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
     public ArrayList<ItemObject> itemObjects;
     private Context context;
     private HttpURLConnection connection = null;
+    private ImageView mThumbnailImage;
 
     public MainListAdapter(Context context, ArrayList<ItemObject> itemObjects){
         this.context = context;
@@ -50,6 +44,8 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
         ItemObject item = itemObjects.get(position);
         holder.mtitle.setText(item.title);
         holder.mpublish.setText(item.publishedAt);
+        String url = item.url;
+        Glide.with(this.context).load(url).into(mThumbnailImage);   //ThumbnailImage load
     }
 
     @Override
@@ -59,7 +55,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder{
         private TextView mtitle, mpublish;
-        private ImageView mThumbnailImage;
+//        private ImageView mThumbnailImage;
 
 
         public ViewHolder(@NonNull View itemView) {
