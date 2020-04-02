@@ -1,21 +1,18 @@
 package hyerim.my.videoproject.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-
 import com.bumptech.glide.Glide;
-
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import hyerim.my.videoproject.MainActivity;
+import hyerim.my.videoproject.PlayActivity;
 import hyerim.my.videoproject.R;
 import hyerim.my.videoproject.object.ItemObject;
 
@@ -24,7 +21,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
     private Context context;
     private HttpURLConnection connection = null;
     private ImageView mThumbnailImage;
-
+    private String videoId;
     public MainListAdapter(Context context, ArrayList<ItemObject> itemObjects){
         this.context = context;
         this.itemObjects = itemObjects;
@@ -44,6 +41,8 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
         ItemObject item = itemObjects.get(position);
         holder.mtitle.setText(item.title);
         holder.mpublish.setText(item.publishedAt);
+        holder.videonum.setText(item.videoId);
+        videoId = item.videoId;
         String url = item.url;
         Glide.with(this.context).load(url).into(mThumbnailImage);   //ThumbnailImage load
     }
@@ -54,16 +53,22 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView mtitle, mpublish;
-//        private ImageView mThumbnailImage;
-
-
+        private TextView mtitle, mpublish, videonum;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mtitle = itemView.findViewById(R.id.title);
             mpublish = itemView.findViewById(R.id.published);
             mThumbnailImage = itemView.findViewById(R.id.thumbnailImage);
+            videonum = itemView.findViewById(R.id.videonum);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), PlayActivity.class);
+                    intent.putExtra("videoid",videonum.getText());
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
     }
 }

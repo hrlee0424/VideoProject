@@ -1,22 +1,10 @@
 package hyerim.my.videoproject.asyncktask;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
-
-import com.bumptech.glide.Glide;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-
 import hyerim.my.videoproject.adapter.MainListAdapter;
 import hyerim.my.videoproject.object.ItemObject;
 import okhttp3.OkHttpClient;
@@ -28,8 +16,8 @@ public class YoutubeAsyncTask extends AsyncTask {
     public ArrayList<ItemObject> itemObjects;
     public MainListAdapter mainListAdapter;
     private Context context;
-    private ArrayList<String> list = new ArrayList<>();
     private String apiurl, part, channelId, order, url, maxResults;
+    public String nextPageToken, prevPageToken = "";
     private final String key = "AIzaSyCIgi0uGLGXEAJ_AG8uqCbllZUfhDrxcQY";   //API 키 번호
 
     public YoutubeAsyncTask(Context context, MainListAdapter mainListAdapter, ArrayList<ItemObject> itemObject) {
@@ -58,22 +46,26 @@ public class YoutubeAsyncTask extends AsyncTask {
             String result = response.body().string();
 
             JSONObject obj = new JSONObject(result);
+            nextPageToken = (String)obj.get("nextPageToken");
+//            prevPageToken = (String)obj.get("prevPageToken");
+
             JSONArray arr = (JSONArray) obj.get("items");
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject item = (JSONObject) arr.get(i);
                 JSONObject kind = (JSONObject)item.get("id");
                 String id = (String)kind.get("videoId");    //videoId 파싱
+
                 JSONObject snippet = (JSONObject) item.get("snippet");
                 String mpublish = (String)snippet.get("publishedAt");    //publishedAt 파싱
                 String publish = mpublish.substring(0,10);      //publishedAt 날짜만 자르기
                 String mtitle = (String) snippet.get("title");       //title 파싱
-                String title = mtitle.replace("&#39;", "'");
+                String title = mtitle.replace("&#39;", "'");    //'문구 변환
+
                 JSONObject thumbnails = (JSONObject) snippet.get("thumbnails");
-                JSONObject mdefault = (JSONObject)thumbnails.get("default");
-                String murl = (String) mdefault.get("url");     //url 파싱
+                JSONObject mdefault = (JSONObject)thumbnails.get("medium");
+                String murl = (String) mdefault.get("url");     //url 파싱(thumbnail)
 
                 itemObjects.add(new ItemObject(id,publish,title,murl));
-
         }
             return true;
         } catch(Exception e) {
