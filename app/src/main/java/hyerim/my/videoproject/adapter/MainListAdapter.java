@@ -40,8 +40,6 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
     @Override
     public MainListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View v = inflater.inflate(R.layout.mainlistview_item,parent,false);
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.mainlistview_item,null,false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -59,34 +57,6 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
         return itemObjects.size();
     }
 
-    /*
-    *         URL url = null;
-        try {
-            url = new URL(item.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        try {
-            connection = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        connection.setDoInput(true);
-        try {
-            connection.connect();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        InputStream inputStream = null;
-        try {
-            inputStream = connection.getInputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-
-        holder.mThumbnailImage.setImageBitmap(bitmap);
-        * */
     class ViewHolder extends RecyclerView.ViewHolder{
         private TextView mtitle, mpublish;
         private ImageView mThumbnailImage;
