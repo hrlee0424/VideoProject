@@ -1,6 +1,4 @@
-package hyerim.my.videoproject;
-
-import androidx.appcompat.app.AppCompatActivity;
+package hyerim.my.videoproject.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,13 +10,14 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import hyerim.my.videoproject.R;
+
 public class PlayActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
     private String TAG = PlayActivity.class.getSimpleName();
-    public static String API = "AIzaSyCIgi0uGLGXEAJ_AG8uqCbllZUfhDrxcQY";
+    public static final String API = "AIzaSyCIgi0uGLGXEAJ_AG8uqCbllZUfhDrxcQY";
     private YouTubePlayerView youTubePlayerView;
     private YouTubePlayer ytp ;
     private String videoId = "";
-    private YouTubePlayer.OnInitializedListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

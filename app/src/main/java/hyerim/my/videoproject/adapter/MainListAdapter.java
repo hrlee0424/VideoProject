@@ -2,26 +2,29 @@ package hyerim.my.videoproject.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import hyerim.my.videoproject.PlayActivity;
+import hyerim.my.videoproject.MyApplication;
+import hyerim.my.videoproject.dbmanager.DBManager;
+import hyerim.my.videoproject.activity.PlayActivity;
 import hyerim.my.videoproject.R;
 import hyerim.my.videoproject.object.ItemObject;
 
 public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHolder> {
     public ArrayList<ItemObject> itemObjects;
     private Context context;
-    private HttpURLConnection connection = null;
-    private ImageView mThumbnailImage;
-    private String videoId;
+    private ImageView mThumbnailImage, img_boomark;
+    private ItemObject item, itemNo;
     public MainListAdapter(Context context, ArrayList<ItemObject> itemObjects){
         this.context = context;
         this.itemObjects = itemObjects;
@@ -38,11 +41,12 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MainListAdapter.ViewHolder holder, int position) {
-        ItemObject item = itemObjects.get(position);
-        holder.mtitle.setText(item.title);
+        item = itemObjects.get(position);
+        holder.mtitle.setText(Html.fromHtml(item.title));
         holder.mpublish.setText(item.publishedAt);
-        holder.videonum.setText(item.videoId);
-        videoId = item.videoId;
+        holder.videonum = item.videoId;
+//        holder.num.setText(item.videoId);
+        itemNo = item;
         String url = item.url;
         Glide.with(this.context).load(url).into(mThumbnailImage);   //ThumbnailImage load
     }
@@ -53,20 +57,31 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView mtitle, mpublish, videonum;
-        public ViewHolder(@NonNull View itemView) {
+        TextView mtitle, mpublish, num;
+        String videonum;
+        public ViewHolder(@NonNull final View itemView) {
             super(itemView);
             mtitle = itemView.findViewById(R.id.title);
             mpublish = itemView.findViewById(R.id.published);
+//            num = itemView.findViewById(R.id.videonum);
             mThumbnailImage = itemView.findViewById(R.id.thumbnailImage);
-            videonum = itemView.findViewById(R.id.videonum);
+            img_boomark = itemView.findViewById(R.id.img_boomark);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), PlayActivity.class);
-                    intent.putExtra("videoid",videonum.getText());
+                    intent.putExtra("videoid",videonum);
                     v.getContext().startActivity(intent);
+                }
+            });
+
+            img_boomark.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyApplication.getInstance().dbManager.insert(itemObjects.get(getPosition()));
+                    Toast.makeText(context, "즐겨찾기에 저장되었습니다.", Toast.LENGTH_LONG).show();
+//                    img_boomark.setImageResource();
                 }
             });
         }

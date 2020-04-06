@@ -14,4 +14,36 @@ public class ItemObject {
       this.title = title;
       this.url = url;
    }
+
+   public void setVideoId(String videoId) {
+      this.videoId = videoId;
+   }
+
+   public void setPublishedAt(String publishedAt) {
+      this.publishedAt = publishedAt;
+   }
+
+   public void setTitle(String title) {
+      this.title = title;
+   }
+
+   public void setUrl(String url) {
+      this.url = url;
+   }
+
+   public String getVideoId() {
+      return videoId;
+   }
+
+   public String getPublishedAt() {
+      return publishedAt;
+   }
+
+   public String getTitle() {
+      return title;
+   }
+
+   public String getUrl() {
+      return url;
+   }
 }

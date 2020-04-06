@@ -18,7 +18,8 @@ public class YoutubeAsyncTask extends AsyncTask {
     private Context context;
     private String apiurl, part, channelId, order, url, maxResults;
     public String nextPageToken, prevPageToken = "";
-    private final String key = "AIzaSyCIgi0uGLGXEAJ_AG8uqCbllZUfhDrxcQY";   //API 키 번호
+    private boolean firstPage;
+    private static final String key = "AIzaSyCIgi0uGLGXEAJ_AG8uqCbllZUfhDrxcQY";   //API 키 번호
 
     public YoutubeAsyncTask(Context context, MainListAdapter mainListAdapter, ArrayList<ItemObject> itemObject) {
         this.context = context;
@@ -34,7 +35,7 @@ public class YoutubeAsyncTask extends AsyncTask {
             part = "snippet";
             channelId = "UCyn-K7rZLXjGl7VXGweIlcA";     //채널 ID
             order = "date";         //최근 항목 부터 리스트
-            maxResults = "15";      //최대 항목 수
+            maxResults = "10";      //최대 항목 수
             url = apiurl + "key=" + key + "&part=" + part + "&channelId=" + channelId + "&order=" + order + "&maxResults=" + maxResults;
 
             Request request = new Request.Builder()
@@ -48,6 +49,9 @@ public class YoutubeAsyncTask extends AsyncTask {
             JSONObject obj = new JSONObject(result);
             nextPageToken = (String)obj.get("nextPageToken");
 //            prevPageToken = (String)obj.get("prevPageToken");
+            if (firstPage == true){
+                prevPageToken = (String)obj.get("prevPageToken");
+            }
 
             JSONArray arr = (JSONArray) obj.get("items");
             for (int i = 0; i < arr.length(); i++) {
@@ -58,14 +62,13 @@ public class YoutubeAsyncTask extends AsyncTask {
                 JSONObject snippet = (JSONObject) item.get("snippet");
                 String mpublish = (String)snippet.get("publishedAt");    //publishedAt 파싱
                 String publish = mpublish.substring(0,10);      //publishedAt 날짜만 자르기
-                String mtitle = (String) snippet.get("title");       //title 파싱
-                String title = mtitle.replace("&#39;", "'");    //'문구 변환
-
+                String title = (String) snippet.get("title");       //title 파싱
                 JSONObject thumbnails = (JSONObject) snippet.get("thumbnails");
                 JSONObject mdefault = (JSONObject)thumbnails.get("medium");
                 String murl = (String) mdefault.get("url");     //url 파싱(thumbnail)
 
                 itemObjects.add(new ItemObject(id,publish,title,murl));
+                firstPage = true;
         }
             return true;
         } catch(Exception e) {

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/thumbnailImage"
+        android:id="@+id/bm_thumbnailImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@android:color/black"/>
@@ -22,35 +21,26 @@
             android:layout_marginTop="20dp">
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/bm_title"
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"/>
 
             <ImageView
-                android:id="@+id/img_boomark"
+                android:id="@+id/bm_img_boomark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30sp"
-                android:src="@android:drawable/btn_star_big_off" />
-
-
+                android:src="@android:drawable/btn_star_big_on" />
         </LinearLayout>
 
 
         <TextView
-            android:id="@+id/published"
+            android:id="@+id/bm_published"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"/>
 
-        <!--
-        <TextView
-            android:id="@+id/videonum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"/>
-            -->
     </LinearLayout>
 
 </LinearLayout>

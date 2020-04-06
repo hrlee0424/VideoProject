@@ -1,21 +1,24 @@
-package hyerim.my.videoproject;
+package hyerim.my.videoproject.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import hyerim.my.videoproject.R;
 import hyerim.my.videoproject.adapter.MainListAdapter;
 import hyerim.my.videoproject.asyncktask.YoutubeAsyncTask;
+import hyerim.my.videoproject.dbmanager.DBManager;
 import hyerim.my.videoproject.object.ItemObject;
 
-import android.content.ClipData;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-
-import org.json.JSONObject;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 
@@ -23,13 +26,20 @@ public class MainActivity extends AppCompatActivity {
     private MainListAdapter mainListAdapter;
     private ArrayList<ItemObject> itemObjects;
     private ConnectivityManager manager;
-
+    private DBManager dbManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         checkInternetState();   //인터넷 연결 확인
+
+//        dbManager = new DBManager(this, "database.db", null, 1);
+
+        //toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("백종원의 요리비책");
 
         RecyclerView recyclerView = findViewById(R.id.mainlistview);
         itemObjects = new ArrayList<>();
@@ -50,11 +60,30 @@ public class MainActivity extends AppCompatActivity {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!recyclerView.canScrollVertically(1)) {
-
+//                    new YoutubeAsyncTask(getApplicationContext(),mainListAdapter, itemObjects).execute();
                 }
             }
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_bookmark){
+//            Toast.makeText(this,"bookmark",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(),BookmarkActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     //인터넷 연결 확인 메소드
     private void checkInternetState() {
